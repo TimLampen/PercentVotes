@@ -1,0 +1,84 @@
+#Default configuration file for PercentVotes, made by TimLampen, have fun with it :)
+
+################################################################
+#                                                              #
+#                           Defaults                           #
+#                                                              #
+################################################################
+
+prefix: '&6[&b%Votes&6] &r'
+#Sets the prefix of the plugin
+
+useGUI: false
+#Set to true or false if you want to open a GUI to the player when they do /vote instead just text
+
+################################################################
+#                                                              #
+#                           Rewards                            #
+#                                                              #
+################################################################
+
+rewards:
+
+  Reward1:
+    chance: 10
+#How often this reward will be chosen, its X in a 1000 chance where X represents the number that you insert
+
+    rewards:
+    - 10%
+    - give %player% diamondblock 256
+    - broadcast %player% won something!
+#You can use %player% to get the players name, you can also use X% where X represents the percentage of rankup money you want to give to the player
+
+  Reward2:
+    chance: 1
+    rewards:
+    - 100%
+    - give %player% ironblock 256
+    - broadcast %player% won an amazing prize!
+
+Always:
+  rewards:
+  - 5%
+  - give %player% air 100
+  - msg %player% your luck sucks
+#This reward is called whenever the other ones aren't, so if the plugin passes all the other rewards because of the chance, then it will do this one
+
+command:
+#Messages sent went the player does the command /vote
+- "&bVoteLink 1 - www.google.com"
+- "&aVoteLink 2 - spigotmc.org"
+  
+#If useGUI is set to true, change to follow this:
+#- [InvSpot]@[MaterialID]@[Name]@[OnClick(Optional)]
+
+#Ex. - 0@1@&4Link1@www.minecraftservers.org/coolserver
+#This would add an item at the first slot (Java starts counting at 0, the item would be stone with a name of "Link 1" and when it is clicked it will send the user to minecraftservers.org)
+
+rewards:
+#Messages sent to player when he does /rewards
+- "&41/100 chance to get Reward1"
+- "&a1/1000 chance to get Reward2"
+- "&b69/100 chance to get Reward69"
+
+################################################################
+#                                                              #
+#                           Ranks                              #
+#                                                              #
+################################################################
+
+ranks:
+  
+  A:
+    cost: 1000
+    nextrank: B
+#This is how much it costs to rankup to the next rank for example A is 1000 because it costs 1000 to rank up to B
+
+  B:
+    cost: 50000
+    nextrank: C
+  
+  C:
+    cost: 750000
+    nextrank: end
+#Once you have set the last rank, put 'end' so that the plugin knows that its the last rank

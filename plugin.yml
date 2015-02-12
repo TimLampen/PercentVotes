@@ -1,0 +1,10 @@
+version: 1.0
+name: PercentVotes
+main: me.timlampen.percentvotes.Main
+depend: [Votifier]
+
+commands:
+  vote:
+    description: View vote messages
+  rewards:
+    description: View all rewards
