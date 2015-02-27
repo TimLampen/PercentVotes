@@ -63,12 +63,54 @@ public class Main extends JavaPlugin implements VoteListener, Listener, CommandE
 		if(sender instanceof Player){
 			Player player = (Player) sender;
 			if(cmd.getName().equalsIgnoreCase("vote")){
-				if(getConfig().getBoolean("useGUI")){
-					makeInv(player);
+				if(args.length==0){
+					player.sendMessage(ChatColor.GOLD + "~-~-~-~-~-~-[" + ChatColor.BLUE + "PercentVotes" + ChatColor.GOLD + "]-~-~-~-~-~-~");
+					player.sendMessage(ChatColor.RED + "/vote open " + ChatColor.AQUA + "- Lists the links of all voting sites");
+					player.sendMessage(ChatColor.RED + "/vote give <player> <%amount>" + ChatColor.AQUA + "- Gives a player a specified percent of their rankup cost");
 				}
 				else{
-					for(String s : getConfig().getStringList("command")){
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+					if(args[0].equalsIgnoreCase("give")){
+						if(args.length==3){
+							if(player.hasPermission("percentrewards.give")){
+								try{
+									Integer.parseInt(args[2]);
+								}catch(NumberFormatException nfe){
+									nfe.printStackTrace();
+									player.sendMessage(prefix + ChatColor.RED + "Unable to parse number: " + args[2] + ", change to a number value.");
+									return false;
+								}
+								
+								int amt = Integer.parseInt(args[2]);
+								if(Bukkit.getPlayer(args[1])!=null){
+									Player target = Bukkit.getPlayer(args[1]);
+									eco.depositPlayer(target, getRankPercent(target, amt));
+									player.sendMessage(prefix + ChatColor.GREEN + "You have given " + amt + "% of " + target.getName() + " rankup cost to him!");
+									target.sendMessage(prefix + ChatColor.GREEN + "You have recieved " + amt + "% of your rankup cost from " + player.getName());
+								}
+								else{
+									player.sendMessage(prefix + ChatColor.RED + "Incorrect syntax: /vote give <player> <%amount>");
+								}
+							}
+							else{
+								player.sendMessage(prefix + ChatColor.RED + "You do not have the correct permission");
+							}
+						}
+						else{
+							player.sendMessage(prefix + ChatColor.RED + "Incorrect syntax: /vote give <player> <%amount>");
+						}
+					}
+					else if(args[0].equalsIgnoreCase("open")){
+						if(getConfig().getBoolean("useGUI")){
+							makeInv(player);
+						}
+						else{
+							for(String s : getConfig().getStringList("command")){
+								player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+							}
+						}
+					}
+					else{
+						player.sendMessage(prefix + ChatColor.RED + "Incorrect syntax: /vote");
 					}
 				}
 			}
@@ -87,7 +129,6 @@ public class Main extends JavaPlugin implements VoteListener, Listener, CommandE
 			if(rank.toLowerCase().equalsIgnoreCase(perms.getPrimaryGroup(player).toLowerCase())){
 				double rankupamt = getConfig().getInt("ranks." + rank + ".cost");
 				amt = rankupamt*(percent/100);
-				player.sendMessage(percent/100 + "");
 				break;
 			}
 		}
@@ -239,4 +280,6 @@ public class Main extends JavaPlugin implements VoteListener, Listener, CommandE
         }
         return (perms != null);
     }
+    
+    
 }
